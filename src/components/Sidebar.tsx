@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react"
 import type { FetchResponse } from "../types";
 
@@ -65,13 +64,31 @@ const Sidebar = () => {
             <div className="mb-5">
                 <h2 className="text-xl font-semibold mb-3">Categories</h2>
             </div>
+            <section>
+                {categories.map((category, index) => (
+                    <label key={index} className="block mb-2">
+                        <input type="radio" name="category" value={category} className="mr-2 w-[16px]" />
+                        {category.toUpperCase()}
+                    </label>
+                ))}
+            </section>
 
-            {categories.map((category, index) => (
-                <label key={index} className="block mb-2">
-                    <input type="radio" name="category" value={category} className="mr-2 w-[16px]" />
-                    {category.toUpperCase()}
-                </label>
-            ))}
+            {/* Keywords Section */}
+
+            <div className="mb-5 mt-4">
+                <h2 className="text-xl font-semibold mb-3">Keywords</h2>
+                <div>
+                    {keywords.map((keyword, index) => (
+                        <button key={index} className="block mb-2 px-4 py-2 w-full text-left rounded hover:bg-gray-200">
+                            {keyword.toUpperCase()}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <button className="w-full mb-[4rem] py-2 bg-black text-white rounded mt-5">
+                Reset Filters
+            </button>
 
         </section>
     </div>
