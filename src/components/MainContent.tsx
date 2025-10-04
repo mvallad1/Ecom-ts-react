@@ -72,7 +72,7 @@ const MainContent = () => {
   const totalPages = Math.ceil(totalProducts/itemsPerPage);
 
   const handlePageChange = (newPage: number) => {
-    if (currentPage > 1 && newPage <= totalPages) {
+    if (newPage > 0 && newPage <= totalPages) {
         setCurrentPage(newPage);
     }
     
@@ -85,9 +85,18 @@ const MainContent = () => {
     let endPage = Math.min(totalPages, currentPage + 2);
 
     if (currentPage - 2 < 1) {
-        endPage = Math.min(totalPages, endPage + (2 - currentPage - 1));
+        endPage = Math.min(totalPages, endPage + (2 - (currentPage - 1)));
     }
-  }
+    if (currentPage + 2 > totalPages) {
+        startPage = Math.max(1, startPage - (2 - (totalPages - currentPage)));
+    }
+
+    for (let page = startPage; page <= endPage; page++) {
+        buttons.push(page);
+    }
+
+    return buttons;
+  };
 
 
   return (
@@ -102,7 +111,7 @@ const MainContent = () => {
 
                      </button>
                      {dropdownOpen && (
-                         <div className="absolute bg-white border border-grat-300 rouneded mt-2 w-full sm:w-40">
+                         <div className="absolute bg-white border border-gray-300 rounded mt-2 w-full sm:w-40">
                              <button onClick={() => setFilter('cheap')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
                                  Cheap
                              </button>
@@ -138,7 +147,9 @@ const MainContent = () => {
 
                 {/*Page Numbers*/}
                 <div className="flex flex-wrap justify-center">
-
+                    {getPaginationButtons().map(page => (
+                        <button key={page} onClick={() => handlePageChange(page)} className={`border px-4 py-2 mx-1 rounded-full ${page === currentPage ? 'bg-black text-white' : ""}`}>{page}</button>
+                    ))}
                 </div>
 
                 {/*next*/}
@@ -154,7 +165,8 @@ const MainContent = () => {
             
             
 
-        </div> 
+       </div>
+        
     </section>
   )
 }
