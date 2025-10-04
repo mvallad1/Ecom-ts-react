@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useFilter } from "./FilterContext"
 import { Tally3 } from "lucide-react";
 import axios from "axios";
+import BookCard from "./BookCard";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } = useFilter();
@@ -70,33 +71,40 @@ const MainContent = () => {
 
   return (
     <section className="xl:w-[55rem] lg:w-[55rem] sm:w-[40rem] xs:w-[20rem] p-5">
-       <div className="flex flex-col sm:flex-row justify-between items-center">
-            <div className="relative mb-5 mt-5">
-                <button onClick={() => setDropdownOpen(!dropdownOpen)} className="border px-4 py-2 rounded-full flex items-center">
-                    <Tally3 className="mr-2" />
+       <div className="mb-5">
+            <div className="flex flex-col sm:flex-row justify-between items-center">
+                 <div className="relative mb-5 mt-5">
+                     <button onClick={() => setDropdownOpen(!dropdownOpen)} className="border px-4 py-2 rounded-full flex items-center">
+                         <Tally3 className="mr-2" />
 
-                    {filter === 'all' ? 'Filter' : filter.charAt(0).toLowerCase() + filter.slice(1)}
+                         {filter === 'all' ? 'Filter' : filter.charAt(0).toLowerCase() + filter.slice(1)}
 
-                </button>
-                {dropdownOpen && (
-                    <div className="absolute bg-white border border-grat-300 rouneded mt-2 w-full sm:w-40">
-                        <button onClick={() => setFilter('cheap')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
-                            Cheap
-                        </button>
-                        <button onClick={() => setFilter('expensive')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
-                            Expensive
-                        </button>
-                        <button onClick={() => setFilter('popular')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
-                            Popular
-                        </button>
-                    </div>
-                )}
+                     </button>
+                     {dropdownOpen && (
+                         <div className="absolute bg-white border border-grat-300 rouneded mt-2 w-full sm:w-40">
+                             <button onClick={() => setFilter('cheap')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
+                                 Cheap
+                             </button>
+                             <button onClick={() => setFilter('expensive')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
+                                 Expensive
+                             </button>
+                             <button onClick={() => setFilter('popular')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
+                                 Popular
+                             </button>
+                         </div>
+                     )}
+                 </div>
+
+        
             </div>
 
             <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-5">
-                {filteredProducts}
+                {filteredProducts.map((product) => (
+                    <BookCard key={product.id} id={product.id} title={product.title} image={product.thumbnail} price={product.price} />
+                ))}
             </div>
-       </div> 
+
+        </div> 
     </section>
   )
 }
