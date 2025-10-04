@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useFilter } from "./FilterContext"
 import { Tally3 } from "lucide-react";
+import axios from "axios";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } = useFilter();
@@ -15,8 +16,56 @@ const MainContent = () => {
 
   useEffect(() => {
     let url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${(currentPage -1) * itemsPerPage}`
+  
+    if (keyword) {
+        url = `https://dummyjson.com/products/search?q=${keyword}`
+    }
+
+    axios.get(url).then(response => {
+        setProducts(response.data.products);
+        console.log(response.data.products)
+    }).catch(error => {
+        console.error('Error fetching data', error);
+    })
+
   }, [currentPage, keyword]);
 
+  const getFilteredProducts = () => {
+    let filteredProducts = products;
+
+    if (selectedCategory) {
+        filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
+        console.log(filteredProducts);
+    }
+
+    if (minPrice !== undefined) {
+        filteredProducts = filteredProducts.filter(product => product.price >= minPrice);
+    }
+
+    if (maxPrice !== undefined) {
+        filteredProducts = filteredProducts.filter(product => product.price <= maxPrice);
+    }
+
+    if (searchQuery) {
+        filteredProducts = filteredProducts.filter(product => product.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+
+    switch (filter) {
+        case 'expensive':
+            return filteredProducts.sort((a,b) => b.price - a.price);
+        case 'cheap':
+            return filteredProducts.sort((a,b) => a.price - b.price);
+        case 'popular':
+            return filteredProducts.sort((a,b) => b.rating - a.rating);
+    
+        default:
+            return filteredProducts;
+    }
+  }
+
+  const filteredProducts = getFilteredProducts();
+
+  console.log(filteredProducts);
 
 
   return (
@@ -45,7 +94,7 @@ const MainContent = () => {
             </div>
 
             <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-5">
-                {/*bookcard*/}
+                {filteredProducts}
             </div>
        </div> 
     </section>
