@@ -66,7 +66,28 @@ const MainContent = () => {
 
   const filteredProducts = getFilteredProducts();
 
-  console.log(filteredProducts);
+  //console.log(filteredProducts);
+
+  const totalProducts = 100;
+  const totalPages = Math.ceil(totalProducts/itemsPerPage);
+
+  const handlePageChange = (newPage: number) => {
+    if (currentPage > 1 && newPage <= totalPages) {
+        setCurrentPage(newPage);
+    }
+    
+  };
+
+  const getPaginationButtons = () => {
+    const buttons: number[] = []
+
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    if (currentPage - 2 < 1) {
+        endPage = Math.min(totalPages, endPage + (2 - currentPage - 1));
+    }
+  }
 
 
   return (
@@ -103,6 +124,35 @@ const MainContent = () => {
                     <BookCard key={product.id} id={product.id} title={product.title} image={product.thumbnail} price={product.price} />
                 ))}
             </div>
+
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
+
+                {/*previous*/}
+                <button 
+                    onClick={() => handlePageChange(currentPage - 1)} 
+                    className="border px-4 py-2 mx-2 rounded-full"
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+
+                {/*Page Numbers*/}
+                <div className="flex flex-wrap justify-center">
+
+                </div>
+
+                {/*next*/}
+                <button 
+                    onClick={() => handlePageChange(currentPage + 1)} 
+                    className="border px-4 py-2 mx-2 rounded-full"
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                </button>
+
+            </div>
+            
+            
 
         </div> 
     </section>
