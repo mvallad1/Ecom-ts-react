@@ -121,6 +121,7 @@ const MainContent = () => {
                              <button onClick={() => setFilter('popular')} className="block px-4 py-2 w-full text-left hover:bg-gray-200">
                                  Popular
                              </button>
+                            
                          </div>
                      )}
                  </div>
